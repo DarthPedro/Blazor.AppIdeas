@@ -48,3 +48,14 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+.container {
+    border-style: solid;
+    border-radius: 15px;
+    border-width: 1px;
+    border-color: darkgreen;
+}
+
+hr {
+    border-top: 1px solid darkgreen;
+}
