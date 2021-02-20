@@ -1,0 +1,76 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- '*'
+
+# all of the variables used by this pipeline and dependent templates.
+variables:
+  buildConfiguration: 'Release'
+  dotnetSdkVersion: '5.0.x'
+  releaseBranchName: 'main'
+  localPackageFeed: 'd20Tek'
+
+# define the image to use for the whole pipeline... can be overridden by specific jobs.
+pool:
+    vmImage: 'ubuntu-16.04'
+
+stages:
+# Build
+- stage: 'Build'
+  displayName: 'Build app'
+  jobs:
+  - job: 'Build'
+    displayName: 'Build job'
+
+    steps:
+    # ensure the right version of .NET Core is installed -- defaults to 3.1.
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core SDK $(dotnetSdkVersion)'
+      inputs:
+        version: '$(dotnetSdkVersion)'
+
+    # restore NuGet packages used by the projects.
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore project dependencies'
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+        feedsToUse: 'select'
+        vstsFeed: '$(localPackageFeed)'
+
+    # build all projects in this repo... defined by folders with .csproj files.
+    - task: DotNetCoreCLI@2
+      displayName: 'Build the project - $(buildConfiguration)'
+      inputs:
+        command: 'build'
+        arguments: '--no-restore --configuration $(buildConfiguration)'
+        projects: '**/*.csproj'
+        versioningScheme: byBuildNumber
+    
+    # publish all artifacts from the builds.
+    - task: DotNetCoreCLI@2
+      displayName: 'Publish the project - $(buildConfiguration)'
+      inputs:
+        command: 'publish'
+        projects: '**/*.csproj'
+        publishWebProjects: false
+        arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/$(buildConfiguration)'
+        zipAfterPublish: false
+
+    # runs tests for all projects in this repo... defined by folders with .Test.csproj files.
+    - task: DotNetCoreCLI@2
+      displayName: 'Run unit tests - $(buildConfiguration)'
+      inputs:
+        command: 'test'
+        arguments: '--no-build --no-restore --configuration $(buildConfiguration)'
+        # publish the test pass/fail results to the pipeline, so that they are available in the Azure DevOps pipeline dashboard.
+        publishTestResults: true
+        projects: '**/*.Tests.csproj'
+
+    # publish the artifacts created by this build in the drop location.
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifact: drop'
+      condition: succeeded()
