@@ -10,7 +10,7 @@ namespace Blazor.AppIdeas.Converters.ViewModels
 
         public string ErrorMessage { get; set; }
 
-        public string ErrorVisibility
+        public string ErrorDisplay
         {
             get => string.IsNullOrEmpty(ErrorMessage) ? "none" : "normal";
         }
@@ -19,7 +19,9 @@ namespace Blazor.AppIdeas.Converters.ViewModels
         {
             try
             {
-                ErrorMessage = string.Empty;
+                ErrorMessage = null;
+                if (string.IsNullOrEmpty(Binary)) throw new FormatException();
+
                 Decimal = Convert.ToInt32(Binary, 2).ToString();
             }
             catch
@@ -32,7 +34,9 @@ namespace Blazor.AppIdeas.Converters.ViewModels
         {
             try
             {
-                ErrorMessage = string.Empty;
+                ErrorMessage = null;
+                if (string.IsNullOrEmpty(Decimal)) throw new FormatException();
+
                 int number = Convert.ToInt32(Decimal);
                 Binary = Convert.ToString(number, 2);
             }
