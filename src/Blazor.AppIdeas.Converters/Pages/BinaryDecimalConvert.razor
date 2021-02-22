@@ -6,19 +6,23 @@
     <form class="form-row">
         <div class="form-group col-lg-6 col-md-12">
             <label for="binary">Binary:</label>
-            <input type="text" class="form-control" id="binary" placeholder="Enter binary number" @bind-value="@vm.Binary">
+            <input type="text" class="form-control" id="binary" 
+                   placeholder="Enter binary number" @bind-value="@vm.Binary">
         </div>
         <div class="form-group col-lg-6 col-md-12">
             <label for="decimal">Decimal:</label>
-            <input type="text" class="form-control" id="decimal" placeholder="Enter decimal number" @bind-value="@vm.Decimal">
+            <input type="text" class="form-control" id="decimal" 
+                   placeholder="Enter decimal number" @bind-value="@vm.Decimal">
         </div>
         <div class="alert alert-danger col-12 ml-1" style="display: @vm.ErrorDisplay">
             <strong>Error:</strong> @vm.ErrorMessage
         </div>
     </form>
     <div class="text-center">
-        <input id="btn-convert-decimal" class="btn btn-outline-primary" type="button" value="Convert to Decimal" @onclick="vm.ConvertDecimal">
-        <input id="btn-convert-binary" class="btn btn-outline-primary" type="button" value="Convert to Binary" @onclick="vm.ConvertBinary">
+        <input id="btn-convert-decimal" class="btn btn-outline-primary" type="button"
+               value="Convert to Decimal" @onclick="vm.ConvertDecimal">
+        <input id="btn-convert-binary" class="btn btn-outline-primary" type="button"
+               value="Convert to Binary" @onclick="vm.ConvertBinary">
     </div>
 </div>
 

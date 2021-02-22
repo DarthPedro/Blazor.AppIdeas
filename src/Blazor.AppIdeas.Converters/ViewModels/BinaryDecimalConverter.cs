@@ -8,12 +8,9 @@ namespace Blazor.AppIdeas.Converters.ViewModels
 
         public string Decimal { get; set; }
 
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; private set; }
 
-        public string ErrorDisplay
-        {
-            get => string.IsNullOrEmpty(ErrorMessage) ? "none" : "normal";
-        }
+        public string ErrorDisplay => string.IsNullOrEmpty(ErrorMessage) ? "none" : "normal";
 
         public void ConvertDecimal()
         {
