@@ -3,9 +3,9 @@ using Xunit;
 
 namespace Blazor.AppIdeas.Converters.Tests.ViewModels
 {
-    public class BinaryDecimalConverterTests
+    public class RomanDecimalConverterTests
     {
-        private const string binaryErrorMessage = "Binary must be a valid number with only 0s and 1s.";
+        private const string romanErrorMessage = "Roman numerals only support the following characters: I, V, X, L, C, D, M.";
         private const string decimalErrorMessage = "Decimal must be a valid number with only digits 0-9.";
 
         [Fact]
@@ -14,28 +14,28 @@ namespace Blazor.AppIdeas.Converters.Tests.ViewModels
             // arrange
 
             // act
-            var converter = new BinaryDecimalConverter();
+            var converter = new RomanDecimalConverter();
 
             // assert
             Assert.NotNull(converter);
-            Assert.Null(converter.Binary);
+            Assert.Null(converter.RomanText);
             Assert.Null(converter.Decimal);
             Assert.Null(converter.ErrorMessage);
             Assert.Equal("none", converter.ErrorDisplay);
         }
 
         [Theory]
-        [InlineData("101", "5", null, "none")]
-        [InlineData("11011010", "218", null, "none")]
-        [InlineData("", null, binaryErrorMessage, "normal")]
-        [InlineData("102", null, binaryErrorMessage, "normal")]
-        public void ConvertDecimal_WithBinaryString(
-            string initialBinary, string expectedDecimal, string expectedErrorMessage, string expectedErrorDisplay)
+        [InlineData("V", "5", null, "none")]
+        [InlineData("CCXVIII", "218", null, "none")]
+        [InlineData(null, null, romanErrorMessage, "normal")]
+        [InlineData("CCQVI", null, romanErrorMessage, "normal")]
+        public void ConvertDecimal_WithRomanString(
+            string initialRoman, string expectedDecimal, string expectedErrorMessage, string expectedErrorDisplay)
         {
             // arrange
-            var converter = new BinaryDecimalConverter
+            var converter = new RomanDecimalConverter
             {
-                Binary = initialBinary
+                RomanText = initialRoman
             };
 
             // act
@@ -48,24 +48,24 @@ namespace Blazor.AppIdeas.Converters.Tests.ViewModels
         }
 
         [Theory]
-        [InlineData("5", "101", null, "none")]
-        [InlineData("186", "10111010", null, "none")]
+        [InlineData("5", "V", null, "none")]
+        [InlineData("186", "CLXXXVI", null, "none")]
         [InlineData("", null, decimalErrorMessage, "normal")]
         [InlineData("102l", null, decimalErrorMessage, "normal")]
         public void ConvertBinary_WithDecimalString(
-            string initialDecimal, string expectedBinary, string expectedErrorMessage, string expectedErrorDisplay)
+            string initialDecimal, string expectedRoman, string expectedErrorMessage, string expectedErrorDisplay)
         {
             // arrange
-            var converter = new BinaryDecimalConverter
+            var converter = new RomanDecimalConverter
             {
                 Decimal = initialDecimal
             };
 
             // act
-            converter.ConvertBinary();
+            converter.ConvertRoman();
 
             // assert
-            Assert.Equal(expectedBinary, converter.Binary);
+            Assert.Equal(expectedRoman, converter.RomanText);
             Assert.Equal(expectedErrorMessage, converter.ErrorMessage);
             Assert.Equal(expectedErrorDisplay, converter.ErrorDisplay);
         }
