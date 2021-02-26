@@ -1,0 +1,46 @@
+﻿@page "/number-converter"
+@inject NumberConverterViewModel vm
+
+<div class="col-lg-8 col-md-10 offset-lg-2 offset-md-1 mt-3 pb-3 container">
+    <h3 class="mt-3">Ultra Number Converter</h3>
+    <hr />
+    <EditForm class="form-row" Model=@vm>
+        <div class="form-group col-lg-6 col-md-12">
+            <InputText id="entry-value" class="form-control"
+                       placeholder="Enter number" @bind-Value=vm.EntryValue />
+            <InputSelect id="entry-number-system" class="col-12" style="margin-top: 1px"
+                         @bind-Value=vm.EntryNumberSystem>
+                <option value="Binary">Binary</option>
+                <option value="Octal">Octal</option>
+                <option value="Decimal">Decimal</option>
+                <option value="Hexadecimal">Hexadecimal</option>
+                <option value="Roman">Roman</option>
+            </InputSelect>
+        </div>
+        <div class="form-group col-lg-6 col-md-12">
+            <InputText id="result-value" class="form-control" readonly
+                       placeholder="Result..." @bind-Value=vm.ResultValue />
+            <InputSelect id="result-number-system" class="col-12" style="margin-top: 1px"
+                         @bind-Value=vm.ResultNumberSystem>
+                @foreach (var enumItem in HtmlFormatHelper.GetEnumData<NumberSystem>())
+                {
+                    <option value="@enumItem.Item2">@enumItem.Item1</option>
+                }
+            </InputSelect>
+        </div>
+        @if (vm.HasError)
+        {
+        <div class="alert alert-danger col-12 ml-1">
+            <strong>Error:</strong> @vm.ErrorMessage
+        </div>
+        }
+    </EditForm>
+
+    <div class="text-center">
+        <input id="btn-convert" type="button" class="btn btn-outline-primary"
+               value="Convert" @onclick="@vm.Convert" />
+    </div>
+</div>
+
+@code {
+}

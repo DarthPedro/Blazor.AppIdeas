@@ -59,3 +59,9 @@ a, .btn-link {
 hr {
     border-top: 1px solid darkgreen;
 }
+
+select {
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    height: 36px;
+}

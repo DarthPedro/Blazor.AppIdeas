@@ -24,6 +24,7 @@ namespace Blazor.AppIdeas.Converters
 
             // add services and view models to DI container.
             builder.Services.AddTransient<RomanDecimalConverter>();
+            builder.Services.AddTransient<NumberConverterViewModel>();
 
             await builder.Build().RunAsync();
         }
