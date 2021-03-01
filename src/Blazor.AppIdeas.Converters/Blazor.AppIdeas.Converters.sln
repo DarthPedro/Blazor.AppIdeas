@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.AppIdeas.Converters", "Blazor.AppIdeas.Converters.csproj", "{B0DF3D97-D6B9-4B21-8211-B30035D977D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.AppIdeas.Converters", "Blazor.AppIdeas.Converters.csproj", "{B0DF3D97-D6B9-4B21-8211-B30035D977D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor.AppIdeas.Converters.Tests", "..\..\tests\Blazor.AppIdeas.Converters.Tests\Blazor.AppIdeas.Converters.Tests.csproj", "{6E57ABB2-235E-407D-808E-62B694520BEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blazor.AppIdeas.Converters.Tests", "..\..\tests\Blazor.AppIdeas.Converters.Tests\Blazor.AppIdeas.Converters.Tests.csproj", "{6E57ABB2-235E-407D-808E-62B694520BEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
