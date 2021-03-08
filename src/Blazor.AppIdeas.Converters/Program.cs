@@ -1,3 +1,4 @@
+using Blazor.AppIdeas.Converters.Services;
 using Blazor.AppIdeas.Converters.ViewModels;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,12 +17,20 @@ namespace Blazor.AppIdeas.Converters
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+            };
+            builder.Services.AddScoped(sp => httpClient);
 
             // add services and view models to DI container.
+            builder.Services.AddSingleton<ICurrencyServiceClient>(
+                sp => new CurrencyServiceClient(httpClient));
+
             builder.Services.AddTransient<RomanDecimalConverter>();
             builder.Services.AddTransient<NumberConverterViewModel>();
             builder.Services.AddTransient<DollarCentsConverterViewModel>();
+            builder.Services.AddTransient<CurrencyConverterViewModel>();
 
             await builder.Build().RunAsync();
         }
