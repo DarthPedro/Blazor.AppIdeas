@@ -31,6 +31,7 @@ namespace Blazor.AppIdeas.Converters
             builder.Services.AddTransient<NumberConverterViewModel>();
             builder.Services.AddTransient<DollarCentsConverterViewModel>();
             builder.Services.AddTransient<CurrencyConverterViewModel>();
+            builder.Services.AddTransient<JsonCsvConverterViewModel>();
 
             await builder.Build().RunAsync();
         }
