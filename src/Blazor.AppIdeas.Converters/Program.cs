@@ -26,6 +26,7 @@ namespace Blazor.AppIdeas.Converters
             // add services and view models to DI container.
             builder.Services.AddSingleton<ICurrencyServiceClient>(
                 sp => new CurrencyServiceClient(httpClient));
+            builder.Services.AddSingleton<IBrowserFileAdapter, BrowserFileAdapter>();
 
             builder.Services.AddTransient<RomanDecimalConverter>();
             builder.Services.AddTransient<NumberConverterViewModel>();

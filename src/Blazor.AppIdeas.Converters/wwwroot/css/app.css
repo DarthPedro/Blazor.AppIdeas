@@ -65,3 +65,30 @@ select {
     border-radius: 5px;
     height: 36px;
 }
+
+
+/*----------------------- Input File styles --------------------------*/
+
+input[type="file"] {
+    position: absolute;
+    z-index: -1;
+    top: 4px;
+    left: 4px;
+    font-size: 17px;
+    color: #b8b8b8;
+}
+
+.button-wrap {
+    position: relative;
+}
+
+.button {
+    display: inline-block;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: gray;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+}

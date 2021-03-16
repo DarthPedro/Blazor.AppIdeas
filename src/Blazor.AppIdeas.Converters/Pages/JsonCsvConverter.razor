@@ -9,10 +9,13 @@
             <InputTextArea id="convert-from-value" class="form-control"
                            placeholder="Type JSON or CSV..." rows="8"
                            @bind-Value=vm.SourceText />
-            <button id="open-file" class="btn btn-outline-secondary form-control">
-                <span class="oi oi-cloud-upload" aria-hidden="true" />
-                Open Data File
-            </button>
+            <div class="button-wrap">
+                <label class="btn btn-secondary" for="convert-open-file">
+                    <span class="oi oi-cloud-upload" aria-hidden="true" /> Load File
+                </label>
+                <InputFile id="convert-open-file" style="width: 100%"
+                           OnChange="vm.OpenInputFile"/>
+            </div>
         </div>
         <div class="col-lg-2 col-md-12">
             <button id="btn-convert-csv"
@@ -30,11 +33,14 @@
             <InputTextArea id="converted-value" class="form-control" rows="8"
                            readonly @bind-Value=vm.ConvertedText />
             <div>
-                <button id="download-file" class="btn btn-outline-secondary text-nowrap" style="width: 52%">
+                <button id="download-file" class="btn btn-outline-secondary text-nowrap"
+                        style="width: 52%" disabled="@vm.IsConvertedTextEmpty">
                     <span class="oi oi-cloud-download" aria-hidden="true" />
                     Download File
                 </button>
-                <button id="clipboard-copy" class="btn btn-outline-secondary" style="width: 46.5%; margin-left: -2px">
+                <button id="clipboard-copy" class="btn btn-outline-secondary"
+                        style="width: 46.5%; margin-left: -2px"
+                        disabled="@vm.IsConvertedTextEmpty" @onclick="vm.Copy">
                     <span class="oi oi-clipboard" aria-hidden="true" />
                     Copy
                 </button>
@@ -50,5 +56,4 @@
 </div>
 
 @code {
-
 }
