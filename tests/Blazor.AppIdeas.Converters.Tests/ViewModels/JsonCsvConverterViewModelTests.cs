@@ -14,6 +14,7 @@ namespace Blazor.AppIdeas.Converters.Tests.ViewModels
     {
         private readonly IJSRuntime _jsRuntime = new Mock<IJSRuntime>().Object;
         private readonly IBrowserFileAdapter _fileAdapter;
+        private readonly IBrowserFileAdapter _errorAdapter = new Mock<IBrowserFileAdapter>(MockBehavior.Strict).Object;
         private readonly IBrowserFile _testFile = new Mock<IBrowserFile>().Object;
 
         public JsonCsvConverterViewModelTests()
@@ -96,8 +97,8 @@ namespace Blazor.AppIdeas.Converters.Tests.ViewModels
             vm.ClearAll();
 
             // assert
-            Assert.Empty(vm.SourceText);
-            Assert.Empty(vm.ConvertedText);
+            Assert.Null(vm.SourceText);
+            Assert.Null(vm.ConvertedText);
             Assert.Null(vm.ErrorMessage);
             Assert.False(vm.HasError);
         }
@@ -139,13 +140,14 @@ namespace Blazor.AppIdeas.Converters.Tests.ViewModels
         }
 
         [Fact]
-        public async Task OpenInputFile_WithNullValidChangeEventArgs()
+        public async Task OpenInputFile_WithNullChangeEventArgs()
         {
             // arrange
             var vm = new JsonCsvConverterViewModel(_jsRuntime, _fileAdapter);
+            InputFileChangeEventArgs args = null;
 
             // act
-            await vm.OpenInputFile(null).ConfigureAwait(false);
+            await vm.OpenInputFile(args).ConfigureAwait(false);
 
             // assert
             Assert.Null(vm.SourceText);
@@ -175,14 +177,42 @@ namespace Blazor.AppIdeas.Converters.Tests.ViewModels
             var files = new List<IBrowserFile> { _testFile };
             var args = new InputFileChangeEventArgs(files);
 
-            var errorAdapter = new Mock<IBrowserFileAdapter>(MockBehavior.Strict).Object;
-            var vm = new JsonCsvConverterViewModel(_jsRuntime, errorAdapter);
+            var vm = new JsonCsvConverterViewModel(_jsRuntime, _errorAdapter);
 
             // act
             await vm.OpenInputFile(args).ConfigureAwait(false);
 
             // assert
             Assert.Null(vm.SourceText);
+            Assert.True(vm.HasError);
+        }
+
+        [Fact]
+        public async Task DownloadConvertedText_WithValidText()
+        {
+            // arrange
+            var vm = new JsonCsvConverterViewModel(_jsRuntime, _fileAdapter)
+            {
+                ConvertedText = "foo, bar\r\ndata, 12\r\nasdf, 33\r\n"
+            };
+
+            // act
+            await vm.DownloadConvertedText().ConfigureAwait(false);
+
+            // assert
+            Assert.False(vm.HasError);
+        }
+
+        [Fact]
+        public async Task DownloadConvertedText_WithAdapterException()
+        {
+            // arrange
+            var vm = new JsonCsvConverterViewModel(_jsRuntime, _errorAdapter);
+
+            // act
+            await vm.DownloadConvertedText().ConfigureAwait(false);
+
+            // assert
             Assert.True(vm.HasError);
         }
     }

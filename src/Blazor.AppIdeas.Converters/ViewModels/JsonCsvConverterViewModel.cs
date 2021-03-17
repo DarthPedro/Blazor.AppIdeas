@@ -1,5 +1,6 @@
 ﻿using Blazor.AppIdeas.Converters.Models;
 using Blazor.AppIdeas.Converters.Services;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using System;
@@ -9,6 +10,8 @@ namespace Blazor.AppIdeas.Converters.ViewModels
 {
     public class JsonCsvConverterViewModel
     {
+        private const string _jsCopyTextMethod = "clipboardCopy.copyText";
+        private const string _convertedTextFilename = "ConvertedText";
         private readonly IJSRuntime _jsRuntime;
         private readonly IBrowserFileAdapter _browserFileAdapter;
 
@@ -50,13 +53,13 @@ namespace Blazor.AppIdeas.Converters.ViewModels
 
         public void ClearAll()
         {
-            SourceText = string.Empty;
-            ConvertedText = string.Empty;
+            SourceText = null;
+            ConvertedText = null;
             ErrorMessage = null;
         }
 
         public async Task Copy() => await _jsRuntime.InvokeVoidAsync(
-                                        "clipboardCopy.copyText",
+                                        _jsCopyTextMethod,
                                         ConvertedText);
 
         public async Task OpenInputFile(InputFileChangeEventArgs e)
@@ -78,7 +81,26 @@ namespace Blazor.AppIdeas.Converters.ViewModels
             }
             catch (Exception ex)
             {
-                ErrorMessage = $"Cannot read file {e?.File.Name}. {ex.Message}";
+                ErrorMessage = $"Cannot read file '{e?.File.Name}'. {ex.Message}";
+            }
+        }
+
+        public async Task DownloadConvertedText()
+        {
+            try
+            {
+                ErrorMessage = null;
+
+                await _browserFileAdapter.SaveTextAsAsync(
+                                            _jsRuntime,
+                                            _convertedTextFilename,
+                                            IBrowserFileAdapter.FileType.CSV,
+                                            ConvertedText)
+                                         .ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Cannot download converted text file. {ex.Message}";
             }
         }
     }
