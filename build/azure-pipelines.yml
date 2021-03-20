@@ -15,7 +15,7 @@ variables:
 
 # define the image to use for the whole pipeline... can be overridden by specific jobs.
 pool:
-    vmImage: 'ubuntu-16.04'
+    vmImage: 'windows.latest'
 
 stages:
 # Build
