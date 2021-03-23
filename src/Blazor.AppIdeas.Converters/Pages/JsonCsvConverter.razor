@@ -19,12 +19,17 @@
         </div>
         <div class="col-lg-2 col-md-12">
             <button id="btn-convert-csv"
-                    class="btn btn-primary col-lg-10 offset-lg-1 col-6 mb-lg-1 mb-3"
+                    class="btn btn-primary col-lg-10 offset-lg-1 col-4 mb-lg-1 mb-3"
                     @onclick="vm.ConvertToCsv">
                 To CSV
             </button>
+            <button id="btn-convert-json"
+                    class="btn btn-primary col-lg-10 offset-lg-1 col-4 mb-lg-1 mb-3"
+                    @onclick="vm.ConvertToJson">
+                To JSON
+            </button>
             <button id="btn-clear"
-                    class="btn btn-primary col-lg-10 offset-lg-1 col-5 mb-lg-1 mb-3"
+                    class="btn btn-primary col-lg-10 offset-lg-1 col-3 mb-lg-1 mb-3"
                     @onclick="vm.ClearAll">
                 Clear
             </button>

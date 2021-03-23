@@ -82,6 +82,50 @@ namespace Blazor.AppIdeas.Converters.Tests.Pages
             cut.MarkupMatches(JsonCsvConverterExpectedResults.DefaultRenderResult);
         }
 
+        [Fact]
+        public void ToCsvButtonClicked()
+        {
+            // arrange
+            using var ctx = CreateConfiguredContext();
+
+            var vm = new JsonCsvConverterViewModel(_jsRuntime, _fileAdapter)
+            {
+                SourceText = "{ \"foo\" : 42, \"bar\" : \"data\" }",
+            };
+            ctx.Services.AddSingleton<JsonCsvConverterViewModel>(vm);
+
+            var cut = ctx.RenderComponent<JsonCsvConverter>();
+
+            // act
+            cut.Find("#btn-convert-csv").Click();
+
+            // assert
+            Assert.Contains("foo, bar", cut.Markup);
+            Assert.Contains("42, data", cut.Markup);
+        }
+
+        [Fact]
+        public void ToJsonButtonClicked()
+        {
+            // arrange
+            using var ctx = CreateConfiguredContext();
+
+            var vm = new JsonCsvConverterViewModel(_jsRuntime, _fileAdapter)
+            {
+                SourceText = "foo, bar\r\n42, data",
+            };
+            ctx.Services.AddSingleton<JsonCsvConverterViewModel>(vm);
+
+            var cut = ctx.RenderComponent<JsonCsvConverter>();
+
+            // act
+            cut.Find("#btn-convert-json").Click();
+
+            // assert
+            Assert.Contains("&quot;foo&quot; : &quot;42&quot;", cut.Markup);
+            Assert.Contains("&quot;bar&quot; : &quot;data&quot;", cut.Markup);
+        }
+
         private TestContext CreateConfiguredContext()
         {
             var ctx = new TestContext();

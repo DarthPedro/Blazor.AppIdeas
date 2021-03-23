@@ -81,6 +81,33 @@ namespace Blazor.AppIdeas.Converters.Tests.ViewModels
             Assert.Equal(expectedConverted, vm.ConvertedText);
             Assert.Equal(expectedConvertedEmpty, vm.IsConvertedTextEmpty);
             Assert.Equal(expectedError, vm.HasError);
+            if (vm.HasError == false)
+            {
+                Assert.Equal(IBrowserFileAdapter.FileType.CSV, vm.ConvertedType);
+            }
+        }
+
+        [Theory]
+        [InlineData("foo\r\n42\r\n", "[\r\n    { \"foo\" : \"42\" }\r\n]\r\n", false, false)]
+        [InlineData("foo, bar\r\n42, { \"prop\" : \"value\" }\r\n", "[\r\n    { \"foo\" : \"42\", \"bar\" : \"{ \"prop\" : \"value\" }\" }\r\n]\r\n", false, false)]
+        [InlineData("", "", true, false)]
+        [InlineData(null, null, true, true)]
+        public void ConvertToJson(string source, string expectedConverted, bool expectedConvertedEmpty, bool expectedError)
+        {
+            // arrange
+            var vm = new JsonCsvConverterViewModel(_jsRuntime, _fileAdapter)
+            {
+                SourceText = source
+            };
+
+            // act
+            vm.ConvertToJson();
+
+            // assert
+            Assert.Equal(expectedConverted, vm.ConvertedText);
+            Assert.Equal(expectedConvertedEmpty, vm.IsConvertedTextEmpty);
+            Assert.Equal(IBrowserFileAdapter.FileType.JSON, vm.ConvertedType);
+            Assert.Equal(expectedError, vm.HasError);
         }
 
         [Fact]
@@ -188,12 +215,30 @@ namespace Blazor.AppIdeas.Converters.Tests.ViewModels
         }
 
         [Fact]
-        public async Task DownloadConvertedText_WithValidText()
+        public async Task DownloadConvertedText_WithValidCsvText()
         {
             // arrange
             var vm = new JsonCsvConverterViewModel(_jsRuntime, _fileAdapter)
             {
-                ConvertedText = "foo, bar\r\ndata, 12\r\nasdf, 33\r\n"
+                ConvertedText = "foo, bar\r\ndata, 12\r\nasdf, 33\r\n",
+                ConvertedType = IBrowserFileAdapter.FileType.CSV
+            };
+
+            // act
+            await vm.DownloadConvertedText().ConfigureAwait(false);
+
+            // assert
+            Assert.False(vm.HasError);
+        }
+
+        [Fact]
+        public async Task DownloadConvertedText_WithValidJsonText()
+        {
+            // arrange
+            var vm = new JsonCsvConverterViewModel(_jsRuntime, _fileAdapter)
+            {
+                ConvertedText = @"[ { ""foo"" : ""12"" }, { ""bar"" : ""data"" } ]",
+                ConvertedType = IBrowserFileAdapter.FileType.JSON
             };
 
             // act

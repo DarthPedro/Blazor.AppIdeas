@@ -1,6 +1,5 @@
 ﻿using Blazor.AppIdeas.Converters.Models;
 using Blazor.AppIdeas.Converters.Services;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using System;
@@ -31,6 +30,8 @@ namespace Blazor.AppIdeas.Converters.ViewModels
 
         public bool IsConvertedTextEmpty => string.IsNullOrEmpty(ConvertedText);
 
+        public IBrowserFileAdapter.FileType ConvertedType { get; set; }
+
         public string ErrorMessage { get; private set; }
 
         public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
@@ -43,6 +44,24 @@ namespace Blazor.AppIdeas.Converters.ViewModels
 
                 var converter = new TextConverter(SourceText);
                 ConvertedText = converter.JsonToCsv();
+                ConvertedType = IBrowserFileAdapter.FileType.CSV;
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Cannot parse source text. {ex.Message}";
+                ConvertedText = null;
+            }
+        }
+
+        public void ConvertToJson()
+        {
+            try
+            {
+                ErrorMessage = null;
+
+                var converter = new TextConverter(SourceText);
+                ConvertedText = converter.CsvToJson();
+                ConvertedType = IBrowserFileAdapter.FileType.JSON;
             }
             catch (Exception ex)
             {
@@ -94,7 +113,7 @@ namespace Blazor.AppIdeas.Converters.ViewModels
                 await _browserFileAdapter.SaveTextAsAsync(
                                             _jsRuntime,
                                             _convertedTextFilename,
-                                            IBrowserFileAdapter.FileType.CSV,
+                                            ConvertedType,
                                             ConvertedText)
                                          .ConfigureAwait(false);
             }
