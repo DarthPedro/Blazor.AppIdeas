@@ -92,3 +92,22 @@ input[type="file"] {
     font-weight: bold;
     color: #fff;
 }
+
+.oi-card-image {
+    font-size: 52pt;
+    color: darkgreen;
+}
+
+.app-card-size {
+    width: 100%;
+}
+
+@media (min-width: 641px) {
+    .oi-card-image {
+        font-size: 84pt;
+    }
+
+    .app-card-size {
+        width: 360px;
+    }
+}

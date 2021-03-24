@@ -1,0 +1,36 @@
+﻿<div class="card m-2 app-card-size">
+    <div class="text-center mt-2">
+        <span class="@FullImageCss" aria-hidden="true"></span>
+    </div>
+    <div class="card-body">
+        @if (HasTitle)
+        {
+         <h4 class="card-title">@Title</h4>
+        }
+        <p class="card-text">@ChildContent</p>
+        @if (HasNavigationLink)
+        {
+         <a href="@NavigationLink" class="stretched-link"></a>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    private bool HasTitle => !string.IsNullOrEmpty(Title);
+
+    [Parameter]
+    public string ImageCssName { get; set; }
+
+    private string FullImageCss => $"oi oi-card-image {ImageCssName}";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string NavigationLink { get; set; }
+
+    private bool HasNavigationLink => !string.IsNullOrEmpty(NavigationLink);
+}

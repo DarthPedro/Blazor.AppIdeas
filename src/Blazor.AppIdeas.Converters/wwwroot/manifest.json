@@ -1,9 +1,9 @@
 {
-  "name": "Blazor.AppIdeas.Converters",
-  "short_name": "Blazor.AppIdeas.Converters",
+  "name": "Blazor AppIdeas Converters",
+  "short_name": "BAI Converters",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "darkgreen",
   "theme_color": "#03173d",
   "icons": [
     {
