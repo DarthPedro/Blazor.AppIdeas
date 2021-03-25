@@ -1,0 +1,15 @@
+{
+  "name": "Blazor AppIdeas Beginner",
+  "short_name": "BAI Beginner",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "darkgreen",
+  "theme_color": "#03173d",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
